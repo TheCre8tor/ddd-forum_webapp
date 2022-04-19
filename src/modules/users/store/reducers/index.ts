@@ -1,18 +1,18 @@
-import states from './../states';
+import states from '../states';
 import { UsersState } from '../state.interface';
 import { UsersAction } from '../actions/action.creators';
-import { UserActionType } from '../actions/actions';
+// import { UserActionType } from '../actions/actions';
 import { ReduxUtils } from '../../../../shared/utils/redux.utils';
 
 function usersReducer(state: UsersState = states, action: UsersAction): UsersState {
-    switch (action.type as UserActionType) {
+    switch (action.type) {
         case 'GETTING_USER_PROFILE':
             return { ...state, ...ReduxUtils.reportEventStatus('isFetchingUser') };
         case 'GETTING_USER_PROFILE_SUCCESS':
             return {
                 ...state,
                 ...ReduxUtils.reportEventStatus('isFetchingUser', true),
-                user: action.user,
+                user: action.payload,
                 isAuthenticated: true
             };
         case 'GETTING_USER_PROFILE_FAILURE':
@@ -36,7 +36,7 @@ function usersReducer(state: UsersState = states, action: UsersAction): UsersSta
             return {
                 ...state,
                 ...ReduxUtils.reportEventStatus('isLoggingIn', false),
-                error: action.error
+                error: action.payload
             };
         case 'LOGGING_OUT':
             return {
@@ -53,7 +53,7 @@ function usersReducer(state: UsersState = states, action: UsersAction): UsersSta
             return {
                 ...state,
                 ...ReduxUtils.reportEventStatus('isLoggingOut', false),
-                error: action.error
+                error: action.payload
             };
         case 'CREATING_USER':
             return {
@@ -69,7 +69,7 @@ function usersReducer(state: UsersState = states, action: UsersAction): UsersSta
             return {
                 ...state,
                 ...ReduxUtils.reportEventStatus('isCreatingUser', false),
-                error: action.error
+                error: action.payload
             };
         default:
             return state;

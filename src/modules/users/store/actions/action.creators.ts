@@ -1,18 +1,23 @@
 import * as actions from './actions';
 import { User } from '../../models/user';
 
-export type UsersAction = { [key: string]: actions.UserActionType | any };
+export interface UsersAction {
+    type: actions.UserActionType;
+    payload?: any;
+}
+
+export type Unad = UsersAction;
 
 export function gettingUserProfile(): UsersAction {
     return { type: actions.GETTING_USER_PROFILE };
 }
 
 export function gettingUserProfileSuccess(user: User): UsersAction {
-    return { type: actions.GETTING_USER_PROFILE_SUCCESS, user: user };
+    return { type: actions.GETTING_USER_PROFILE_SUCCESS, payload: user };
 }
 
 export function gettingUserProfileFailure(error: string): UsersAction {
-    return { type: actions.GETTING_USER_PROFILE_FAILURE, error: error };
+    return { type: actions.GETTING_USER_PROFILE_FAILURE, payload: error };
 }
 
 // Logging In Action Creators -->
@@ -26,7 +31,7 @@ export function logginInSuccess(): UsersAction {
 }
 
 export function loggingInFailure(error: string): UsersAction {
-    return { type: actions.LOGGING_IN_FAILURE, error: error };
+    return { type: actions.LOGGING_IN_FAILURE, payload: error };
 }
 
 // Logging Out Action Creators -->
@@ -40,7 +45,7 @@ export function loggingOutSuccess(): UsersAction {
 }
 
 export function loggingOutFailure(error: string): UsersAction {
-    return { type: actions.LOGGING_OUT_FAILURE, error: error };
+    return { type: actions.LOGGING_OUT_FAILURE, payload: error };
 }
 
 // Create User Action Creators -->
@@ -54,5 +59,5 @@ export function creatingUserSuccess(): UsersAction {
 }
 
 export function creatingUserFailure(error: string): UsersAction {
-    return { type: actions.CREATING_USER_FAILURE, error: error };
+    return { type: actions.CREATING_USER_FAILURE, payload: error };
 }
