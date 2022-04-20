@@ -1,39 +1,34 @@
 import { FC, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { IUserOperators } from '../store/operators';
-import { UsersState } from '../store/state.interface';
-
-interface withLogoutHandlingProps extends IUserOperators {
-    users: UsersState;
-}
+import { useAppDispatch, useAppSelector } from '../../../shared/infrastructure/store/hooks';
+import { logout } from '../store/operators';
 
 function withLogoutHandling(WrappedComponent: any) {
-    const HOC: FC<withLogoutHandlingProps> = props => {
+    const HOC: FC = props => {
+        const dispatch = useAppDispatch();
+
+        const { isLoggingOutSuccess, isLoggingOutFailure, error } = useAppSelector(state => state.Users);
+
         const handleLogout = (): void => {
-            props.logout();
+            dispatch(logout());
+            dispatch({ type: '' });
         };
 
         const afterSuccessfulLogout = useCallback(() => {
-            const currentProps: withLogoutHandlingProps = props;
-
-            if (currentProps.users.isLoggingOutSuccess) {
+            if (isLoggingOutSuccess) {
                 return toast.success('Logged out! 🤠', {
                     autoClose: 3000
                 });
             }
-        }, [props]);
+        }, [isLoggingOutSuccess]);
 
         const afterFailedLogout = useCallback(() => {
-            const currentProps: withLogoutHandlingProps = props;
-
-            if (currentProps.users.isLoggingOutFailure) {
-                const error = currentProps.users.error;
-
+            if (isLoggingOutFailure) {
                 return toast.error(`Had some trouble logging out! ${error} 🤠`, {
                     autoClose: 3000
                 });
             }
-        }, [props]);
+        }, [isLoggingOutFailure, error]);
 
         useEffect(() => {
             afterSuccessfulLogout();

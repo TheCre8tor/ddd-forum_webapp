@@ -5,10 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux';
-import configureStore from './shared/infrastructure/store/configure.store';
+import store from './shared/infrastructure/store/store';
 import { initialReduxStartupScript } from './shared/infrastructure/store/startup.script';
-
-const store = configureStore();
 
 initialReduxStartupScript(store);
 

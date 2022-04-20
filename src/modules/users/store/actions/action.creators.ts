@@ -1,12 +1,10 @@
-import * as actions from './actions';
+import { UserActionType as actions } from './actions';
 import { User } from '../../models/user';
 
-export interface UsersAction {
-    type: actions.UserActionType;
+export type UsersAction = {
+    type: actions;
     payload?: any;
-}
-
-export type Unad = UsersAction;
+};
 
 export function gettingUserProfile(): UsersAction {
     return { type: actions.GETTING_USER_PROFILE };

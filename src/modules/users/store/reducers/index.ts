@@ -18,7 +18,8 @@ function usersReducer(state: UsersState = states, action: UsersAction): UsersSta
         case 'GETTING_USER_PROFILE_FAILURE':
             return {
                 ...state,
-                ...ReduxUtils.reportEventStatus('isFetchingUser', false)
+                ...ReduxUtils.reportEventStatus('isFetchingUser', false),
+                error: action.payload
             };
 
         case 'LOGGING_IN':

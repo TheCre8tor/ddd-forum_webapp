@@ -1,8 +1,11 @@
 import * as actionCreators from '../actions/action.creators';
 import { userService } from '../../services/dependency.injection';
+import { Dispatch } from 'redux';
+import { UsersAction } from '../actions/action.creators';
+import { AppThunkAction } from '../../../../shared/infrastructure/store/store';
 
-function logout() {
-    return async (dispatch: any, getState?: any) => {
+const logout = (): AppThunkAction => {
+    return async (dispatch: Dispatch<UsersAction>, getState?: any) => {
         dispatch(actionCreators.loggingOut());
 
         const result = await userService.logout();
@@ -15,6 +18,6 @@ function logout() {
             dispatch(actionCreators.loggingOutSuccess());
         }
     };
-}
+};
 
 export { logout };
