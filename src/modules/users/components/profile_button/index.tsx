@@ -1,1 +1,3 @@
-import React from 'react';
+import ProfileButton from './components/profile_button';
+
+export { ProfileButton };
