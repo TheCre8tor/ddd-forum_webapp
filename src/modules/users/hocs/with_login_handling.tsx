@@ -1,17 +1,21 @@
-import { FC, useCallback, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { IUserOperators } from '../store/operators';
-import { UsersState } from '../store/state.interface';
+import React, { FC, useCallback, useEffect, Fragment } from 'react';
+import { NavigateFunction } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useAppDispatch, useAppSelector } from '../../../shared/infrastructure/store/hooks';
+import { getUserProfile, login } from '../store/operators';
 
-interface withLoginHandlingProps extends IUserOperators {
-    users: UsersState;
-    history: any;
+interface withLoginHandlingProps {
+    history: NavigateFunction;
 }
 
 function withLoginHandling(WrappedComponent: any) {
     const HOC: FC<withLoginHandlingProps> = props => {
+        const users = useAppSelector(state => state.Users);
+        const dispatch = useAppDispatch();
+
         const handleLogin = (email: string, password: string) => {
-            props.login(email, password);
+            dispatch(login(email, password));
         };
 
         const handleLoginProps = (email: string, password: string) => {
@@ -19,32 +23,29 @@ function withLoginHandling(WrappedComponent: any) {
         };
 
         const afterSuccessfulLogin = useCallback(() => {
-            const currentProps: withLoginHandlingProps = props;
-
-            if (currentProps.users.isLoggingInSuccess) {
-                props.getUserProfile();
+            if (users.isLoggingInSuccess) {
+                dispatch(getUserProfile());
 
                 setTimeout(() => {
-                    props.history.push('/');
+                    props.history('/', { replace: true });
                 }, 3000);
 
                 return toast.success('Logged in! 🤠', {
                     autoClose: 3000
                 });
             }
-        }, [props]);
+        }, [dispatch, props, users.isLoggingInSuccess]);
 
         const afterFailedLogin = useCallback(() => {
-            const currentProps: withLoginHandlingProps = props;
+            if (users.isLoggingInFailure) {
+                const error = users.error;
 
-            if (currentProps.users.isLoggingInFailure) {
-                const error = currentProps.users.error;
-
+                console.log(error);
                 return toast.error(`Had some trouble logging in! ${error} 🤠`, {
-                    autoClose: 3000
+                    autoClose: 1000
                 });
             }
-        }, [props]);
+        }, [users.isLoggingInFailure, users.error]);
 
         useEffect(() => {
             afterSuccessfulLogin();
@@ -52,10 +53,13 @@ function withLoginHandling(WrappedComponent: any) {
         }, [afterSuccessfulLogin, afterFailedLogin]);
 
         return (
-            <WrappedComponent
-                {...props}
-                login={(email: string, password: string) => handleLoginProps(email, password)}
-            />
+            <Fragment>
+                <ToastContainer />
+                <WrappedComponent
+                    {...props}
+                    login={(email: string, password: string) => handleLoginProps(email, password)}
+                />
+            </Fragment>
         );
     };
 

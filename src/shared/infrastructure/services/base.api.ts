@@ -19,10 +19,7 @@ abstract class BaseAPI {
     }
 
     private enableInterceptors(): void {
-        this.axiosInstance.interceptors.response.use(
-            this.getSuccessResponseHandler(),
-            this.getErrorResponseHandler()
-        );
+        this.axiosInstance.interceptors.response.use(this.getSuccessResponseHandler(), this.getErrorResponseHandler());
     }
 
     private getSuccessResponseHandler() {
@@ -75,7 +72,8 @@ abstract class BaseAPI {
                 }
             }
 
-            return Promise.reject({ ...error });
+            // return Promise.reject({ ...error });
+            return Promise.reject(error.response);
         };
     }
 

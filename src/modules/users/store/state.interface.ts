@@ -3,6 +3,7 @@ import { User } from '../models/user';
 interface UsersState {
     user: User | null;
     isAuthenticated: boolean;
+
     isFetchingUser: boolean;
     isFetchingUserSuccess: boolean;
     isFetchingUserFailure: boolean;

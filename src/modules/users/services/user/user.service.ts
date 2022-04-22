@@ -40,7 +40,7 @@ class UserService extends BaseAPI implements IUsersService {
 
             return new Right(Result.ok<LoginDTO>(dto));
         } catch (err: any) {
-            return new Left(err.response ? err.response.data.message : 'Connection failed');
+            return new Left(err.data ? err.data.error : 'Connection failed');
         }
     }
 
