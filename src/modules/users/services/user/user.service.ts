@@ -12,14 +12,6 @@ class UserService extends BaseAPI implements IUsersService {
         super(authService);
     }
 
-    public async getCurrentUserProfile(): Promise<User> {
-        const response = await this.get('/users/me', null, {
-            authorization: this.authService.getToken('access-token')
-        });
-
-        return response.data['user'] as User;
-    }
-
     public async createUser(email: string, username: string, password: string): Promise<APIResponse<void>> {
         try {
             await this.post('/users', { email, username, password });
@@ -28,6 +20,14 @@ class UserService extends BaseAPI implements IUsersService {
         } catch (err: any) {
             return new Left(err.response ? err.response.data.message : 'Connection failed');
         }
+    }
+
+    public async getCurrentUserProfile(): Promise<User> {
+        const response = await this.get('/users/me', null, {
+            authorization: `Bearer ${this.authService.getToken('access-token')}`
+        });
+
+        return response.data['user'] as User;
     }
 
     public async login(email: string, password: string): Promise<APIResponse<LoginDTO>> {
@@ -47,7 +47,7 @@ class UserService extends BaseAPI implements IUsersService {
     public async logout(): Promise<APIResponse<void>> {
         try {
             await this.post('/users/logout', null, null, {
-                authorization: this.authService.getToken('access-token')
+                authorization: `Bearer ${this.authService.getToken('access-token')}`
             });
 
             this.authService.removeToken('access-token');
