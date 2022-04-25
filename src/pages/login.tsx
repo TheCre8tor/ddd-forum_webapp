@@ -13,8 +13,12 @@ const LoginPage: FC<LoginPageProps> = props => {
         password: ''
     });
 
+    const updateFormField = (fieldName: string, value: string) => {
+        setState({ ...state, [fieldName]: value });
+    };
+
     return (
-        <div className="" onClick={() => props.login('goodluck@gmail.co', 'test1234')}>
+        <div className="" onClick={() => props.login('goodluck@gmail.com', 'test1234')}>
             This is login page
         </div>
     );
