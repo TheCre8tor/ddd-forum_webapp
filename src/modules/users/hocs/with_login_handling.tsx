@@ -1,10 +1,9 @@
-import React, { FC, useCallback, useEffect, Fragment } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../shared/infrastructure/store/hooks';
 import { getUserProfile, login } from '../store/operators';
 
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 interface withLoginHandlingProps {
     history: NavigateFunction;
@@ -54,13 +53,10 @@ function withLoginHandling(WrappedComponent: any) {
         }, [afterSuccessfulLogin, afterFailedLogin]);
 
         return (
-            <Fragment>
-                <ToastContainer />
-                <WrappedComponent
-                    {...props}
-                    login={(email: string, password: string) => handleLoginProps(email, password)}
-                />
-            </Fragment>
+            <WrappedComponent
+                {...props}
+                login={(email: string, password: string) => handleLoginProps(email, password)}
+            />
         );
     };
 
