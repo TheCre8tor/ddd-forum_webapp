@@ -13,8 +13,7 @@ function getUserProfile(): AppThunkAction {
 
             dispatch(actionCreators.gettingUserProfileSuccess(user));
         } catch (err: any) {
-            let message = err.response ? err.response.data.error : '';
-            console.log(err);
+            let message = err.data ? err.data.error : '';
 
             dispatch(actionCreators.gettingUserProfileFailure(message));
         }
