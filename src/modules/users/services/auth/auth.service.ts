@@ -1,9 +1,14 @@
 import { JWTToken, RefreshToken } from '../../models/tokens';
 import { IAuthService, TokenType } from './auth.service.interface';
 
+import CrytoJS from 'crypto-js';
+import Logger from 'logrocker';
+
+const secret = process.env.REACT_APP_JWT_SECRET;
+
 class AuthService implements IAuthService {
-    public accessToken: JWTToken;
-    public refreshToken: RefreshToken;
+    public accessToken: JWTToken | null;
+    public refreshToken: RefreshToken | null;
 
     public static accessTokenName: string = 'ddd-forum-access-token';
     public static refreshTokenName: string = 'ddd-forum-refresh-token';
@@ -17,15 +22,41 @@ class AuthService implements IAuthService {
         return tokenType === 'access-token' ? AuthService.accessTokenName : AuthService.refreshTokenName;
     }
 
+    public encryptToken(token: string): string {
+        const jsonToken = JSON.stringify(token);
+        const ciphertext = CrytoJS.AES.encrypt(jsonToken, secret!).toString();
+
+        return ciphertext;
+    }
+
+    public decryptToken(token: string): string | null {
+        try {
+            const bytes = CrytoJS.AES.decrypt(token, secret!);
+            const parsedToken = JSON.parse(bytes.toString(CrytoJS.enc.Utf8));
+
+            return parsedToken;
+        } catch (err: any) {
+            Logger.error(err);
+            return null;
+        }
+    }
+
     public isAuthenticated(): boolean {
         return this.getToken('access-token') !== null;
     }
 
-    public getToken(tokenType: TokenType): JWTToken | RefreshToken {
-        const tokenName: string = this.getTokenName(tokenType);
+    public getToken(tokenType: TokenType): JWTToken | RefreshToken | null {
+        let decyptData: string | null;
 
+        const tokenName: string = this.getTokenName(tokenType);
         const token = localStorage.getItem(tokenName);
-        return token ? JSON.parse(token).token : null;
+
+        if (!!token) {
+            decyptData = this.decryptToken(token!);
+            return JSON.parse(decyptData!).token;
+        }
+
+        return null;
     }
 
     public setToken(tokenType: TokenType, token: string): void {
@@ -33,9 +64,12 @@ class AuthService implements IAuthService {
         date.setTime(date.getTime() + 30 * 60 * 1000);
 
         const tokenName: string = this.getTokenName(tokenType);
-
         const parsedToken = JSON.stringify({ token: token, expires: date });
-        localStorage.setItem(tokenName, parsedToken);
+
+        // Encrypt data before saving into localStorage
+        const encryptData = this.encryptToken(parsedToken);
+
+        localStorage.setItem(tokenName, encryptData);
     }
 
     public removeToken(tokenType: TokenType): void {
