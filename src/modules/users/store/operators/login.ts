@@ -1,5 +1,6 @@
 import * as actionCreators from '../actions/action.creators';
 import { userService } from '../../services/dependency.injection';
+import { getUserProfile } from './get_user_profile';
 
 function login(email: string, password: string) {
     return async (dispatch: any, getState?: any) => {
@@ -13,6 +14,7 @@ function login(email: string, password: string) {
             dispatch(actionCreators.loggingInFailure(error));
         } else {
             dispatch(actionCreators.logginInSuccess());
+            dispatch(getUserProfile());
         }
     };
 }
