@@ -10,7 +10,7 @@ import './layout.sass';
 
 interface LayoutProps {
     usersService: UserService;
-    children: React.ReactNode;
+    children: ReactNode;
 }
 
 const Layout: FC<LayoutProps> = props => {
