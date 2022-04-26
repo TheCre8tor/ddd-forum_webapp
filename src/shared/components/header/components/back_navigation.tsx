@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 
+import './../sass/back_navigation.sass';
+
 interface BackNavigationProps {
     to: string;
     text: string;

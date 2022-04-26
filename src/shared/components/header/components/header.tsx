@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
+import Logo from './logo';
+
+import './../sass/header.sass';
 
 interface HeaderProps {
     title: string;
@@ -14,6 +17,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = props => {
     return (
         <div className="header">
+            <Logo />
             (// TODO: implement Points)
             <div className="content-container">
                 <h1>{props.title}</h1>
