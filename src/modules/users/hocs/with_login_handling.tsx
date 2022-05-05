@@ -18,10 +18,6 @@ function withLoginHandling(WrappedComponent: any) {
             dispatch(login(email, password));
         };
 
-        const handleLoginProps = (email: string, password: string) => {
-            return handleLogin(email, password);
-        };
-
         const afterSuccessfulLogin = useCallback(() => {
             if (users.isLoggingInSuccess) {
                 dispatch(getUserProfile());
@@ -53,10 +49,7 @@ function withLoginHandling(WrappedComponent: any) {
         }, [afterSuccessfulLogin, afterFailedLogin]);
 
         return (
-            <WrappedComponent
-                {...props}
-                login={(email: string, password: string) => handleLoginProps(email, password)}
-            />
+            <WrappedComponent {...props} login={(email: string, password: string) => handleLogin(email, password)} />
         );
     };
 

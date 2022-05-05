@@ -11,7 +11,4 @@ export type AppState = ReturnType<typeof store.getState>;
 export type AppDispatch = ThunkDispatch<any, null, Action>;
 export type AppThunkAction<T = any> = ThunkAction<T, any, null, Action<any>>;
 
-// export type AppDispatch = ThunkDispatch<UsersState, null, Action>;
-// export type AppThunkAction<T = any> = ThunkAction<T, UsersState, null, Action<any>>;
-
 export default store;

@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import { siteMetaData } from '../../config/site_meta_data.config';
 import withUserService from '../../modules/users/hocs/with_users_service';
@@ -15,9 +15,9 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = props => {
     return (
-        <div className="app-layout">
-            <div className="app-layout-inner">
-                {
+        <HelmetProvider>
+            <div className="app-layout">
+                <div className="app-layout-inner">
                     <Helmet>
                         <title>{siteMetaData.title}</title>
                         <link
@@ -26,12 +26,12 @@ const Layout: FC<LayoutProps> = props => {
                         />
                         <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css" />
                     </Helmet>
-                }
 
-                <ToastContainer />
-                {props.children}
+                    <ToastContainer />
+                    {props.children}
+                </div>
             </div>
-        </div>
+        </HelmetProvider>
     );
 };
 

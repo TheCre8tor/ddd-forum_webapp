@@ -18,7 +18,8 @@ const Header: FC<HeaderProps> = props => {
     return (
         <div className="header">
             <Logo />
-            (// TODO: implement Points)
+
+            {/*  TODO: implement Points */}
             <div className="content-container">
                 <h1>{props.title}</h1>
                 <p>

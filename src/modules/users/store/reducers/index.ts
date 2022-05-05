@@ -1,8 +1,7 @@
 import states from '../states';
 import { UsersState } from '../state.interface';
 import { UsersAction } from '../actions/action.creators';
-// import { UserActionType } from '../actions/actions';
-import { ReduxUtils } from '../../../../shared/utils/redux.utils';
+import { ReduxUtils } from '../../../../shared/infrastructure/store/utils/redux.utils';
 
 function usersReducer(state: UsersState = states, action: UsersAction): UsersState {
     switch (action.type) {

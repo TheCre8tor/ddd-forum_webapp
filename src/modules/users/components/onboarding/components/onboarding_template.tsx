@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '../../../../../shared/components/button';
 import { TextInput } from '../../../../../shared/components/text_input';
 
+import './../scss/onboard_template.sass';
+
 type TemplateType = 'login' | 'signup';
 
 interface OnboardingTemplateProps {
@@ -11,23 +13,23 @@ interface OnboardingTemplateProps {
     onSubmit: () => void;
 }
 
-function getRedirectTextName(type: TemplateType): string {
-    return type === 'login' ? 'Signup' : 'Login';
-}
-
-function getRedirectText(type: TemplateType): string {
-    return type === 'signup' ? 'already have an account?' : "don't have an account?";
-}
-
-function getRedirectLocation(type: TemplateType): string {
-    return type === 'signup' ? '/login' : '/join';
-}
-
-function getTitle(type: TemplateType) {
-    return type === 'signup' ? 'Create account' : 'Log in';
-}
-
 const OnboardingTemplate: FC<OnboardingTemplateProps> = props => {
+    function getRedirectTextName(type: TemplateType): string {
+        return type === 'login' ? 'Signup' : 'Login';
+    }
+
+    function getRedirectText(type: TemplateType): string {
+        return type === 'signup' ? 'already have an account?' : "don't have an account?";
+    }
+
+    function getRedirectLocation(type: TemplateType): string {
+        return type === 'signup' ? '/login' : '/join';
+    }
+
+    function getTitle(type: TemplateType) {
+        return type === 'signup' ? 'Create account' : 'Log in';
+    }
+
     function handleOnChange(fieldName: string, value: string) {
         props.updateFormField(fieldName, value);
     }
@@ -43,6 +45,9 @@ const OnboardingTemplate: FC<OnboardingTemplateProps> = props => {
 
             <TextInput type="text" fieldName="email" placeholder="email" onChange={handleOnChange} />
 
+            <TextInput type="text" fieldName="password" placeholder="password" onChange={handleOnChange} />
+
+            <br />
             <div className="submit-container">
                 <div className="message">
                     <p>{getRedirectText(props.type)}</p>

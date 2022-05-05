@@ -22,14 +22,14 @@ class AuthService implements IAuthService {
         return tokenType === 'access-token' ? AuthService.accessTokenName : AuthService.refreshTokenName;
     }
 
-    public encryptToken(token: string): string {
+    private encryptToken(token: string): string {
         const jsonToken = JSON.stringify(token);
         const ciphertext = CrytoJS.AES.encrypt(jsonToken, secret!).toString();
 
         return ciphertext;
     }
 
-    public decryptToken(token: string): string | null {
+    private decryptToken(token: string): string | null {
         try {
             const bytes = CrytoJS.AES.decrypt(token, secret!);
             const parsedToken = JSON.parse(bytes.toString(CrytoJS.enc.Utf8));
@@ -46,13 +46,11 @@ class AuthService implements IAuthService {
     }
 
     public getToken(tokenType: TokenType): JWTToken | RefreshToken | null {
-        let decyptData: string | null;
-
         const tokenName: string = this.getTokenName(tokenType);
         const token = localStorage.getItem(tokenName);
 
         if (!!token) {
-            decyptData = this.decryptToken(token!);
+            let decyptData = this.decryptToken(token!);
             return JSON.parse(decyptData!).token;
         }
 
